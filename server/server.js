@@ -12,6 +12,17 @@ const port = process.env.PORT || 3000;
 app.use(cors());
 app.use(bodyParser.json());
 
+app.get('/:categoryslug', (req, res) => {
+	var categoryslug = req.params.categoryslug;
+
+	Post.find({
+		primary_category: categoryslug
+	}).then((posts) => {
+		res.send({posts});
+	}, (e) => {
+		res.status(404).send(e);
+	})
+});
 
 app.get('/:categoryslug/:postslug', (req, res) => {
 	// res.send(req.params.postslug);
