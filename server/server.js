@@ -12,6 +12,21 @@ const port = process.env.PORT || 3000;
 app.use(cors());
 app.use(bodyParser.json());
 
+app.get('/recent/:categoryslug', (req, res) => {
+	var categoryslug = req.params.categoryslug;
+
+	Post.find({
+		primary_category: categoryslug
+	})
+	.limit(6)
+	.sort( {date: -1} )
+	.then((posts) => {
+		res.send({posts});
+	}, (e) => {
+		res.status(404).send(e);
+	})
+});
+
 app.get('/:categoryslug', (req, res) => {
 	var categoryslug = req.params.categoryslug;
 
@@ -50,6 +65,7 @@ app.get('/:categoryslug/:postslug', (req, res) => {
 		res.status(400).send();
 	});
 });
+
 
 app.listen(port, () => {
 	console.log(`Started on port ${port}`);
