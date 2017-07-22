@@ -5,12 +5,34 @@ var cors = require('cors');
 
 var {mongoose} = require('./db/mongoose');
 var {Post} = require('./models/post');
+var {Read} = require('./models/read');      
 
 var app = express();
 const port = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(bodyParser.json());
+
+app.get('/read', (req, res) => {
+	
+	Read.find({})
+		.then((read) => {
+		if(!read){
+			return res.status(404).send();
+		}
+
+		res.send({
+			booksread: books_read,
+            pagesread: pages_read,
+    		author	 : last_read.author,
+            title    : last_read.title
+		});
+		
+	}).catch((e) => {
+		res.status(400).send();
+	});
+});
+
 
 app.get('/recent/:categoryslug', (req, res) => {
 	var categoryslug = req.params.categoryslug;
@@ -40,9 +62,9 @@ app.get('/:categoryslug', (req, res) => {
 });
 
 app.get('/:categoryslug/:postslug', (req, res) => {
-	// res.send(req.params.postslug);
+	
 	var postslug = req.params.postslug;
-	//
+	
 	Post.findOne({
 		slug: postslug
 	}).then((post) => {
@@ -51,16 +73,16 @@ app.get('/:categoryslug/:postslug', (req, res) => {
 		}
 
 		res.send({
-			post: post._id,
-			postid: post.id,
-			postdate: post.date,
-			postdatgmt: post.date_gmt,
-			postslug: post.slug,
+			post        : post._id,
+			postid      : post.id,
+			postdate    : post.date,
+			postdatgmt  : post.date_gmt,
+			postslug    : post.slug,
 			postcategory: post.primary_category,
-			posttitle: post.title.rendered,
-			postcontent: post.content.rendered
+			posttitle   : post.title.rendered,
+			postcontent : post.content.rendered
 		});
-		//console.log('post: ', post);
+		
 	}).catch((e) => {
 		res.status(400).send();
 	});
