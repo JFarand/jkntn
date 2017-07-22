@@ -5,34 +5,13 @@ var cors = require('cors');
 
 var {mongoose} = require('./db/mongoose');
 var {Post} = require('./models/post');
-var {Read} = require('./models/read');      
+     
 
 var app = express();
 const port = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(bodyParser.json());
-
-app.get('/read', (req, res) => {
-	
-	Read.find({})
-		.then((read) => {
-		if(!read){
-			return res.status(404).send();
-		}
-
-		res.send({
-			booksread: books_read,
-            pagesread: pages_read,
-    		author	 : last_read.author,
-            title    : last_read.title
-		});
-		
-	}).catch((e) => {
-		res.status(400).send();
-	});
-});
-
 
 app.get('/recent/:categoryslug', (req, res) => {
 	var categoryslug = req.params.categoryslug;
