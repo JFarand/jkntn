@@ -5,13 +5,24 @@ var cors = require('cors');
 
 var {mongoose} = require('./db/mongoose');
 var {Post} = require('./models/post');
-     
+var {Read} = require('./models/read');      
 
 var app = express();
 const port = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(bodyParser.json());
+
+app.get('/read', (req, res) => {
+	
+	Read.find()
+	.then((reads) => {
+		res.send({reads});
+	}, (e) => {
+		console.log(e);
+	})
+});
+
 
 app.get('/recent/:categoryslug', (req, res) => {
 	var categoryslug = req.params.categoryslug;

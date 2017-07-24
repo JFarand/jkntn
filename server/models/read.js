@@ -2,20 +2,20 @@ var mongoose = require('mongoose');
 
 var Read = mongoose.model('Read',{
     books_read: {
-        type: number
+        type: Number
     },
     pages_read: {
-        type: number
+        type: Number
     },
     last_read: {
         author: {
-            type: string
+            type: String
         },
         title: {
-            type: string
+            type: String
         }
     }
 
-});
+}, 'read');
 
 module.exports = {Read};
