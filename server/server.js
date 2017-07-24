@@ -15,12 +15,31 @@ app.use(bodyParser.json());
 
 app.get('/read', (req, res) => {
 	
-	Read.find()
-	.then((reads) => {
-		res.send({reads});
-	}, (e) => {
-		console.log(e);
+	Read.findOne({
+		handle: "OWL"
 	})
+	// .then((reads) => {
+	// 	res.send({reads});
+	// }, (e) => {
+	// 	console.log(e);
+	// })
+	.then((read) => {
+		if(!read){
+			return res.status(404).send();
+		}
+
+		res.send({
+			booksread          : read.books_read,
+			pagesread          : read.pages_read,
+			lastestread_author : read.last_read.author,
+			lastestread_title  : read.last_read.title
+
+			});
+
+	}).catch((e) => {
+		console.log(e);
+		res.status(400).send();
+	});
 });
 
 
