@@ -5,13 +5,24 @@ var cors = require('cors');
 
 var {mongoose} = require('./db/mongoose');
 var {Post} = require('./models/post');
-var {Read} = require('./models/read');      
+var {Read} = require('./models/read');  
+var {Work} = require('./models/work');    
 
 var app = express();
 const port = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(bodyParser.json());
+
+app.get('/work', (req, res) => {
+	
+	Work.find()
+		.then((works) => {
+			res.send({works});
+		}, (e) => {
+			res.status(404).send(e);
+		})
+});
 
 app.get('/read', (req, res) => {
 	
